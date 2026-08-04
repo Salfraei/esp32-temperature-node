@@ -4,4 +4,9 @@
 #define DS18B20_GPIO 4
 #define TEMPERATURE_READ_INTERVAL_MS 5000
 
+#define WIFI_SSID "wifi173"
+#define WIFI_PASSWORD "87654321"
+
+#define WIFI_MAXIMUM_RETRY 10
+
 #endif

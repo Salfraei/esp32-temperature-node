@@ -15,4 +15,8 @@ idf_component_register(
     REQUIRES
         ds18b20
         onewire_bus
+        esp_wifi
+        esp_event
+        esp_netif
+        nvs_flash
 )

@@ -1,8 +1,11 @@
-#include "ds18b20_driver.h"
 #include "app_config.h"
+#include "ds18b20_driver.h"
+#include "wifi_manager.h"
 
 #include "esp_err.h"
 #include "esp_log.h"
+#include "nvs_flash.h"
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
@@ -12,7 +15,18 @@ void app_main(void)
 {
     ESP_LOGI(TAG, "Starting ESP32 temperature node");
 
-    esp_err_t result = ds18b20_driver_init();
+    esp_err_t result = nvs_flash_init();
+
+    if (result == ESP_ERR_NVS_NO_FREE_PAGES ||
+        result == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        result = nvs_flash_init();
+    }
+
+    ESP_ERROR_CHECK(result);
+
+    result = ds18b20_driver_init();
 
     if (result != ESP_OK) {
         ESP_LOGE(
@@ -26,13 +40,34 @@ void app_main(void)
 
     ESP_LOGI(TAG, "DS18B20 initialized successfully");
 
+    result = wifi_manager_init();
+
+    if (result != ESP_OK) {
+        ESP_LOGE(
+            TAG,
+            "Wi-Fi initialization failed: %s",
+            esp_err_to_name(result)
+        );
+
+        return;
+    }
+
+    ESP_LOGI(TAG, "Wi-Fi connection established");
+
     while (true) {
         float temperature = 0.0f;
 
-        result = ds18b20_driver_read_temperature(&temperature);
+        result =
+            ds18b20_driver_read_temperature(
+                &temperature
+            );
 
         if (result == ESP_OK) {
-            ESP_LOGI(TAG, "Temperature: %.2f C", temperature);
+            ESP_LOGI(
+                TAG,
+                "Temperature: %.2f C",
+                temperature
+            );
         } else {
             ESP_LOGE(
                 TAG,
@@ -42,7 +77,9 @@ void app_main(void)
         }
 
         vTaskDelay(
-            pdMS_TO_TICKS(TEMPERATURE_READ_INTERVAL_MS)
+            pdMS_TO_TICKS(
+                TEMPERATURE_READ_INTERVAL_MS
+            )
         );
     }
 }
