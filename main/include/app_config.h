@@ -1,0 +1,7 @@
+#ifndef APP_CONFIG_H
+#define APP_CONFIG_H
+
+#define DS18B20_GPIO 4
+#define TEMPERATURE_PUBLISH_INTERVAL_MS 5000
+
+#endif
