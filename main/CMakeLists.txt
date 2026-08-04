@@ -4,7 +4,15 @@ idf_component_register(
         "drivers/ds18b20_driver.c"
         "services/wifi_manager.c"
         "services/mqtt_manager.c"
+        "utils/logger.c"
 
     INCLUDE_DIRS
-        "include"
+        "config"
+        "drivers"
+        "services"
+        "utils"
+
+    REQUIRES
+        ds18b20
+        onewire_bus
 )
