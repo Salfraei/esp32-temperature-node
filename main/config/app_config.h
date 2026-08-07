@@ -8,8 +8,8 @@
 #define WIFI_PASSWORD "87654321"
 #define WIFI_MAXIMUM_RETRY 10
 
-#define MQTT_BROKER_URI "mqtt://broker.emqx.io"
-#define MQTT_TOPIC "pavlo/esp32/room1/temperature"
-#define MQTT_CLIENT_ID "esp32-temperature-node"
+#define MQTT_BROKER_URI "mqtt://broker.emqx.io:1883"
+#define MQTT_TOPIC "pavlo/esp32/room1"
+#define MQTT_CLIENT_ID_PREFIX "esp32-temperature-room1"
 
 #endif
